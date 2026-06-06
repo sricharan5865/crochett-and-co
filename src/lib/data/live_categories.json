@@ -1,0 +1,110 @@
+[
+  {
+    "id": "1",
+    "name": "Crochet Bouquets",
+    "slug": "crochet-bouquets",
+    "description": "Handmade crochet flower bouquets that last forever",
+    "icon": "💐",
+    "productCount": 12,
+    "gradient": "from-rose-pink/20 to-lavender/20"
+  },
+  {
+    "id": "2",
+    "name": "Crochet Flowers",
+    "slug": "crochet-flowers",
+    "description": "Individual handmade flowers and arrangements",
+    "icon": "🌸",
+    "productCount": 18,
+    "gradient": "from-rose-pink/20 to-sunflower/20"
+  },
+  {
+    "id": "3",
+    "name": "Tulips",
+    "slug": "tulips",
+    "description": "Beautiful handmade crochet tulips in every color",
+    "icon": "🌷",
+    "productCount": 8,
+    "gradient": "from-rose-pink/30 to-cream/30"
+  },
+  {
+    "id": "4",
+    "name": "Roses",
+    "slug": "roses",
+    "description": "Classic handmade crochet roses for every occasion",
+    "icon": "🌹",
+    "productCount": 15,
+    "gradient": "from-rose-pink-dark/20 to-rose-pink/20"
+  },
+  {
+    "id": "5",
+    "name": "Sunflowers",
+    "slug": "sunflowers",
+    "description": "Cheerful handmade crochet sunflowers to brighten any day",
+    "icon": "🌻",
+    "productCount": 6,
+    "gradient": "from-sunflower/20 to-sunflower-light/20"
+  },
+  {
+    "id": "6",
+    "name": "Lavender Collections",
+    "slug": "lavender-collections",
+    "description": "Calming handmade crochet lavender arrangements",
+    "icon": "💜",
+    "productCount": 5,
+    "gradient": "from-lavender/20 to-lavender-light/20"
+  },
+  {
+    "id": "7",
+    "name": "Hair Clips",
+    "slug": "hair-clips",
+    "description": "Cute handmade crochet hair accessories",
+    "icon": "🎀",
+    "productCount": 10,
+    "gradient": "from-rose-pink/20 to-sunflower/20"
+  },
+  {
+    "id": "8",
+    "name": "Crochet Bags",
+    "slug": "crochet-bags",
+    "description": "Stylish handmade crochet bags for every occasion",
+    "icon": "👜",
+    "productCount": 7,
+    "gradient": "from-sage/20 to-cream/20"
+  },
+  {
+    "id": "9",
+    "name": "Keychains",
+    "slug": "keychains",
+    "description": "Adorable mini crochet keychains and accessories",
+    "icon": "🔑",
+    "productCount": 14,
+    "gradient": "from-sunflower/20 to-rose-pink/20"
+  },
+  {
+    "id": "10",
+    "name": "Gift Hampers",
+    "slug": "gift-hampers",
+    "description": "Curated gift hampers for every special occasion",
+    "icon": "🎁",
+    "productCount": 8,
+    "gradient": "from-lavender/20 to-rose-pink/20"
+  },
+  {
+    "id": "11",
+    "name": "Custom Orders",
+    "slug": "custom-orders",
+    "description": "Design your dream crochet item — we'll make it real",
+    "icon": "✨",
+    "productCount": 0,
+    "gradient": "from-sunflower/20 to-sage/20"
+  },
+  {
+    "id": "12",
+    "name": "Seasonal Collections",
+    "slug": "seasonal-collections",
+    "description": "Limited edition seasonal crochet collections",
+    "icon": "🍂",
+    "productCount": 4,
+    "gradient": "from-sunflower-dark/20 to-sage/20"
+  }
+]
