@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
-import { verifyPassword, updatePassword } from '@/lib/auth';
+import { verifyPassword, updatePassword, isAuthenticated } from '@/lib/auth';
 
 export async function POST(req: Request) {
   try {
+    const isAuth = await isAuthenticated(req);
+    if (!isAuth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { currentPassword, newPassword } = await req.json();
     const ok = await verifyPassword(currentPassword);
     if (!ok) {

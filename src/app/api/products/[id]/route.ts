@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getProductById, saveProduct, deleteProduct, getProducts } from '@/lib/db';
 import type { Product } from '@/lib/data/products';
+import { isAuthenticated } from '@/lib/auth';
 
 type Params = {
   params: Promise<{ id: string }>;
@@ -21,6 +22,11 @@ export async function GET(req: Request, { params }: Params) {
 
 export async function PUT(req: Request, { params }: Params) {
   try {
+    const isAuth = await isAuthenticated(req);
+    if (!isAuth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { id } = await params;
     const existing = await getProductById(id);
     if (!existing) {
@@ -66,6 +72,11 @@ export async function PUT(req: Request, { params }: Params) {
 
 export async function DELETE(req: Request, { params }: Params) {
   try {
+    const isAuth = await isAuthenticated(req);
+    if (!isAuth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { id } = await params;
     
     // Malformed check
