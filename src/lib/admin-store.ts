@@ -89,11 +89,9 @@ export const useAdminStore = create<AdminState>()(
     }),
     {
       name: "crochett-admin-storage",
-      // Only persist data + password; don't persist isLoggedIn (session ends on close)
+      // Only persist password; don't persist products/categories in localStorage to avoid QuotaExceededError when uploading images
       partialize: (state) => ({
         adminPassword: state.adminPassword,
-        products: state.products,
-        categories: state.categories,
       }),
     }
   )

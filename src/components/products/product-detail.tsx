@@ -172,9 +172,18 @@ export default function ProductDetail({
             <div
               className={`relative aspect-square sm:aspect-[4/3] rounded-3xl bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}
             >
-              <span className="text-[120px] sm:text-[160px] md:text-[200px] select-none">
-                {emoji}
-              </span>
+              {product.images && product.images.length > 0 ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={product.images[0]}
+                  alt={product.name}
+                  className="object-cover w-full h-full"
+                />
+              ) : (
+                <span className="text-[120px] sm:text-[160px] md:text-[200px] select-none">
+                  {emoji}
+                </span>
+              )}
 
               {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-col gap-2">

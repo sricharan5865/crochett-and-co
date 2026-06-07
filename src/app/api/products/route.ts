@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getProducts, saveProduct } from '@/lib/db';
 import type { Product } from '@/lib/data/products';
+import { isAuthenticated } from '@/lib/auth';
 
 export async function GET() {
   try {
@@ -13,6 +14,11 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const isAuth = await isAuthenticated(req);
+    if (!isAuth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const payload = await req.json();
     
     // Required fields check (make sure name is not empty or whitespace)

@@ -1,0 +1,2 @@
+## 2026-06-07T02:39:47Z
+You are the Victory Auditor. Your working directory is `c:\Users\sri charan\Documents\projects\crochett-and-co\.agents\victory_auditor\`. Your mission is to perform a victory audit of the redesigned admin login and admin dashboard layout. Check the codebase, inspect the git changes, run the build and E2E tests, and issue a structured verdict (either VICTORY CONFIRMED or VICTORY REJECTED). Please write your report `victory_audit.md` in your working directory and message the verdict to the Sentinel.

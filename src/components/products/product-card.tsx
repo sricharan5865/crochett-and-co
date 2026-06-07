@@ -56,14 +56,23 @@ export default function ProductCard({ product }: { product: Product }) {
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className="group bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-rose-pink/10 transition-shadow duration-300 border border-border/50"
     >
-      {/* Image Placeholder */}
+      {/* Image Display */}
       <Link href={`/shop/${product.slug}`} className="block relative">
         <div
           className={`relative h-52 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}
         >
-          <span className="text-6xl group-hover:scale-110 transition-transform duration-500">
-            {emoji}
-          </span>
+          {product.images && product.images.length > 0 ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <span className="text-6xl group-hover:scale-110 transition-transform duration-500">
+              {emoji}
+            </span>
+          )}
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">

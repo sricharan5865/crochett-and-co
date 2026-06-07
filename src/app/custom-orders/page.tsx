@@ -212,6 +212,7 @@ export default function CustomOrdersPage() {
 
   /* ── Submit ── */
   const handleSubmit = () => {
+    openWhatsApp();
     setDirection(1);
     setStep(TOTAL_STEPS - 1);
   };

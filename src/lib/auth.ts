@@ -43,9 +43,18 @@ export async function updatePassword(newPassword: string): Promise<boolean> {
   return true;
 }
 
-export async function isAuthenticated(req: NextRequest): Promise<boolean> {
+export async function isAuthenticated(req: Request | NextRequest): Promise<boolean> {
   const cookieName = getSessionCookieName();
-  const token = req.cookies.get(cookieName)?.value;
+  let token: string | undefined;
+  if ('cookies' in req && typeof (req as any).cookies.get === 'function') {
+    token = (req as any).cookies.get(cookieName)?.value;
+  } else {
+    const cookieHeader = req.headers.get('cookie') || '';
+    const match = cookieHeader.match(new RegExp(`(^|;)\\s*${cookieName}\\s*=\\s*([^;]+)`));
+    if (match) {
+      token = match[2];
+    }
+  }
   if (!token) return false;
   return verifySessionToken(token);
 }

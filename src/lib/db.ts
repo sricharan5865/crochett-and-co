@@ -2,6 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { products as initialProducts, Product } from './data/products';
 import { categories as initialCategories, occasions as initialOccasions, Category, Occasion } from './data/categories';
+import { Order } from './data/orders';
 import { initializeApp, getApps, getApp } from 'firebase/app';
 // @ts-expect-error - firebase package types might not resolve during bundler resolution
 import { getFirestore, collection, getDocs, doc, getDoc, setDoc, deleteDoc, Firestore, QueryDocumentSnapshot } from 'firebase/firestore';
@@ -31,6 +32,12 @@ export interface IDatabase {
   // Admin Config
   getAdminPasswordHash(): Promise<string>;
   saveAdminPasswordHash(hash: string): Promise<void>;
+
+  // Orders
+  getOrders(): Promise<Order[]>;
+  getOrderById(id: string): Promise<Order | undefined>;
+  saveOrder(order: Order): Promise<void>;
+  deleteOrder(id: string): Promise<void>;
 }
 
 // ----------------------------------------------------
@@ -41,6 +48,7 @@ interface DbCache {
   categories: Category[] | null;
   occasions: Occasion[] | null;
   adminPasswordHash: string | null;
+  orders: Order[] | null;
 }
 
 const getGlobalCache = (): DbCache => {
@@ -51,6 +59,7 @@ const getGlobalCache = (): DbCache => {
       categories: null,
       occasions: null,
       adminPasswordHash: null,
+      orders: null,
     };
   }
   return g.__dbCache;
@@ -143,6 +152,7 @@ class JsonDbFile<T> {
 class JsonDatabase implements IDatabase {
   private productsDb = new JsonDbFile<Product[]>('src/lib/data/live_products.json', initialProducts);
   private categoriesDb = new JsonDbFile<Category[]>('src/lib/data/live_categories.json', initialCategories);
+  private ordersDb = new JsonDbFile<Order[]>('src/lib/data/live_orders.json', []);
   private configDb = new JsonDbFile<{ passwordHash: string }>('src/lib/data/admin_config.json', {
     passwordHash: 'pbkdf2:100000:default_pbkdf2_salt_value_2026:cb9d7b8505eb5c6bac81e3c8ca0e44a9fed24724672b250e7fd869c4fc4b048250a46f4357b0766f1f9ad248ae566f6f81d73ec4f71a8c9faf347a784c4066d1'
   });
@@ -231,6 +241,33 @@ class JsonDatabase implements IDatabase {
 
   async saveAdminPasswordHash(hash: string): Promise<void> {
     await this.configDb.write({ passwordHash: hash });
+  }
+
+  // Orders CRUD
+  async getOrders(): Promise<Order[]> {
+    return await this.ordersDb.read();
+  }
+
+  async getOrderById(id: string): Promise<Order | undefined> {
+    const list = await this.getOrders();
+    return list.find(o => o.id === id);
+  }
+
+  async saveOrder(order: Order): Promise<void> {
+    const list = await this.getOrders();
+    const idx = list.findIndex(o => o.id === order.id);
+    if (idx >= 0) {
+      list[idx] = order;
+    } else {
+      list.push(order);
+    }
+    await this.ordersDb.write(list);
+  }
+
+  async deleteOrder(id: string): Promise<void> {
+    const list = await this.getOrders();
+    const filtered = list.filter(o => o.id !== id);
+    await this.ordersDb.write(filtered);
   }
 }
 
@@ -384,6 +421,38 @@ class FirebaseDatabase implements IDatabase {
     await setDoc(docRef, { passwordHash: hash }, { merge: true });
     invalidateCache('adminPasswordHash');
   }
+
+  // Orders CRUD
+  async getOrders(): Promise<Order[]> {
+    const cache = getGlobalCache();
+    if (cache.orders) return cache.orders;
+
+    if (!db) return [];
+    const colRef = collection(db, 'orders');
+    const snap = await getDocs(colRef);
+    const result = snap.docs.map((d: QueryDocumentSnapshot) => ({ ...d.data(), id: d.id } as Order));
+    cache.orders = result;
+    return result;
+  }
+
+  async getOrderById(id: string): Promise<Order | undefined> {
+    const list = await this.getOrders();
+    return list.find(o => o.id === id);
+  }
+
+  async saveOrder(order: Order): Promise<void> {
+    if (!db) return;
+    const docRef = doc(db, 'orders', order.id);
+    await setDoc(docRef, order);
+    invalidateCache('orders');
+  }
+
+  async deleteOrder(id: string): Promise<void> {
+    if (!db) return;
+    const docRef = doc(db, 'orders', id);
+    await deleteDoc(docRef);
+    invalidateCache('orders');
+  }
 }
 
 // ----------------------------------------------------
@@ -411,3 +480,8 @@ export const getOccasionBySlug = (slug: string) => dbInstance.getOccasionBySlug(
 
 export const getAdminPasswordHash = () => dbInstance.getAdminPasswordHash();
 export const saveAdminPasswordHash = (hash: string) => dbInstance.saveAdminPasswordHash(hash);
+
+export const getOrders = () => dbInstance.getOrders();
+export const getOrderById = (id: string) => dbInstance.getOrderById(id);
+export const saveOrder = (order: Order) => dbInstance.saveOrder(order);
+export const deleteOrder = (id: string) => dbInstance.deleteOrder(id);
