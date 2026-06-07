@@ -331,14 +331,104 @@ function ProductModal({ initial, categories, onSave, onClose }: {
             {/* Media & Tags tab */}
             {tab === "media" && (
               <div className="space-y-5">
-                <Field label="Image URLs">
-                  <TagInput
-                    items={form.images}
-                    onAdd={(v) => set("images", [...form.images, v])}
-                    onRemove={(i) => set("images", form.images.filter((_, j) => j !== i))}
-                    placeholder="Paste image URL…"
-                  />
-                </Field>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Field label="Image URLs">
+                    <TagInput
+                      items={form.images.filter((img) => !img.startsWith("data:"))}
+                      onAdd={(v) => set("images", [...form.images, v])}
+                      onRemove={(i) => {
+                        const nonBase64 = form.images.filter((img) => !img.startsWith("data:"));
+                        const target = nonBase64[i];
+                        set("images", form.images.filter((img) => img !== target));
+                      }}
+                      placeholder="Paste image URL…"
+                    />
+                  </Field>
+                  <Field label="Upload Local Image">
+                    <div className="flex items-center gap-3 mt-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                              const img = new window.Image();
+                              img.onload = () => {
+                                const canvas = document.createElement("canvas");
+                                let width = img.width;
+                                let height = img.height;
+                                const MAX_DIM = 600;
+
+                                if (width > height) {
+                                  if (width > MAX_DIM) {
+                                    height *= MAX_DIM / width;
+                                    width = MAX_DIM;
+                                  }
+                                } else {
+                                  if (height > MAX_DIM) {
+                                    width *= MAX_DIM / height;
+                                    height = MAX_DIM;
+                                  }
+                                }
+
+                                canvas.width = width;
+                                canvas.height = height;
+
+                                const ctx = canvas.getContext("2d");
+                                if (ctx) {
+                                  ctx.drawImage(img, 0, 0, width, height);
+                                  const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7);
+                                  set("images", [...form.images, compressedDataUrl]);
+                                }
+                              };
+                              img.src = event.target?.result as string;
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        className="hidden"
+                        id="admin-image-upload"
+                      />
+                      <label
+                        htmlFor="admin-image-upload"
+                        className="flex items-center gap-2 w-full px-4 py-2.5 rounded-xl border border-dashed border-border bg-white text-xs font-semibold text-foreground/75 hover:bg-muted/10 hover:border-[var(--color-rose-pink)] transition-all cursor-pointer justify-center"
+                      >
+                        <ImageIcon className="w-4 h-4 text-[var(--color-rose-pink)]" />
+                        Choose Image File
+                      </label>
+                    </div>
+                  </Field>
+                </div>
+
+                {/* Previews */}
+                {form.images.length > 0 && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Image Previews</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {form.images.map((img, idx) => (
+                        <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-border bg-muted/10 flex items-center justify-center group">
+                          {img.startsWith("data:") || img.startsWith("http") || img.startsWith("/") ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={img} alt={`Preview ${idx}`} className="object-cover w-full h-full" />
+                          ) : (
+                            <span className="text-2xl">💐</span>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => set("images", form.images.filter((_, i) => i !== idx))}
+                            className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors cursor-pointer shadow-md opacity-90 sm:opacity-0 sm:group-hover:opacity-100"
+                            title="Remove image"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <Field label="Colors">
                   <TagInput
                     items={form.colors}

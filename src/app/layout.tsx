@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import WhatsAppFab from "@/components/ui/whatsapp-fab";
+import AnimatedCursor from "@/components/ui/animated-cursor";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -41,6 +42,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground" suppressHydrationWarning>
         <TooltipProvider>
+          <AnimatedCursor />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
