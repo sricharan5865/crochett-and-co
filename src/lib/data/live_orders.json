@@ -1,0 +1,76 @@
+[
+  {
+    "id": "ord_1",
+    "customerName": "Alice Smith",
+    "customerEmail": "alice.smith@example.com",
+    "customerPhone": "+1 (555) 019-2834",
+    "items": [
+      {
+        "productId": "1",
+        "productName": "Signature Rose Bouquet",
+        "quantity": 1,
+        "price": 2499
+      },
+      {
+        "productId": "3",
+        "productName": "Single Stem Tulip",
+        "quantity": 3,
+        "price": 599
+      }
+    ],
+    "status": "pending",
+    "totalAmount": 4296,
+    "date": "2026-06-05T09:14:32Z"
+  },
+  {
+    "id": "ord_2",
+    "customerName": "Michael Scott",
+    "customerEmail": "mscott@dundermifflin.com",
+    "customerPhone": "+1 (555) 014-9988",
+    "items": [
+      {
+        "productId": "5",
+        "productName": "Crochet Sunflower Arrangement",
+        "quantity": 2,
+        "price": 1850
+      }
+    ],
+    "status": "shipped",
+    "totalAmount": 3700,
+    "date": "2026-06-06T14:45:00Z"
+  },
+  {
+    "id": "ord_3",
+    "customerName": "Emma Watson",
+    "customerEmail": "emma.watson@example.com",
+    "customerPhone": "+1 (555) 012-3456",
+    "items": [
+      {
+        "productId": "2",
+        "productName": "Lavender Dream Set",
+        "quantity": 1,
+        "price": 3500
+      }
+    ],
+    "status": "completed",
+    "totalAmount": 3500,
+    "date": "2026-06-04T11:20:15Z"
+  },
+  {
+    "id": "ord_4",
+    "customerName": "John Doe",
+    "customerEmail": "john.doe@example.com",
+    "customerPhone": "+1 (555) 011-2233",
+    "items": [
+      {
+        "productId": "7",
+        "productName": "Crochet Hair Pin Set",
+        "quantity": 1,
+        "price": 999
+      }
+    ],
+    "status": "cancelled",
+    "totalAmount": 999,
+    "date": "2026-06-03T16:05:00Z"
+  }
+]

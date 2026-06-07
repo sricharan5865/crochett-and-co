@@ -1,48 +1,38 @@
-# Execution Plan — Crochett & Co Admin Portal
+# Implementation Plan - Redesign Admin Portal to Cozy Light Theme
 
-This execution plan coordinates the parallel tracks: E2E Testing Track and the Implementation Track.
+We will redesign the admin login page (`src/app/admin/page.tsx`), admin dashboard (`src/app/admin/dashboard/page.tsx`), and its components (modals like `ProductModal`, `ChangePasswordModal`, and custom switches, inputs, etc.) from their current dark theme styles (`bg-[#0D0D12]`, `glass-dark`, `text-white`, etc.) to match the light, warm, cozy aesthetic of the home page (cream background, pink, lavender, and soft dark text) using the `glass` class, signature backgrounds, and readable dark text (`text-[#2D2D2D]` or `text-foreground`).
 
-## Step-by-Step Execution Plan
+## Milestones
 
-### Step 1: E2E Test Suite Creation (Parallel Track)
-- **Agent**: `teamwork_preview_orchestrator` (as E2E Testing Orchestrator)
-- **Working Directory**: `.agents/e2e_testing_orch/`
-- **Goal**: Read the `ORIGINAL_REQUEST.md`, design a comprehensive opaque-box E2E test suite with Tiers 1-4, implement the test harness/runner, and write the test cases.
-- **Output**: `TEST_INFRA.md`, E2E test suite code, and `TEST_READY.md`.
+1. **Planning & Setup**: Create plans and prepare the work directory.
+2. **Implementation (Worker)**:
+   - Redesign `src/app/admin/page.tsx` (Admin Login) to light theme.
+   - Redesign `src/app/admin/dashboard/page.tsx` (Dashboard layout, Sidebar, Headers, StatCard, Badge, Fields, Switches, Modals, etc.) to light theme.
+3. **Verification**: Run `npm run build` and `npm run test:e2e` to verify correct presentation, selector preservation, and behavior.
 
-### Step 2: Implementation Track - Milestone M2 (Database Layer & Fallback)
-- **Agent**: `teamwork_preview_orchestrator` (as Sub-orchestrator)
-- **Working Directory**: `.agents/sub_orch_db/`
-- **Goal**: Implement `src/lib/db.ts` to support dual-mode (Firebase / JSON file fallback) and set up the local fallback files using the static database arrays.
-- **Output**: Verified `src/lib/db.ts`, fallback JSON files.
+## Detailed Task Breakdown
 
-### Step 3: Implementation Track - Milestone M3 (Admin Authentication & Management)
-- **Agent**: `teamwork_preview_orchestrator` (as Sub-orchestrator)
-- **Working Directory**: `.agents/sub_orch_auth/`
-- **Goal**: Set up `/admin/login`, cookie/session authentication, and password change capability. Use password: `adminpassword123` as default.
-- **Output**: Login screen, cookie session, password update utility.
+### Task 1: Redesign Admin Login Page (`src/app/admin/page.tsx`)
+- Background: Replace `bg-[#0D0D12]` with `bg-gradient-hero` (defined in globals.css).
+- Card Container: Change `glass-dark` class to `glass` class. Remove/adjust the border line accent if needed or keep it light-themed.
+- Text: Change all text from white/white-opacity (`text-white`, `text-white/40`, `text-white/20`, etc.) to dark foreground (`text-foreground` or `text-[#2D2D2D]`, and appropriate low-opacity variants like `text-foreground/40`).
+- Input Fields: Change inputs from `bg-white/[0.03] border border-white/[0.08]` to solid white background (`bg-white`), and border `border-border` (`#F0E4DB`). Text inside inputs should be readable (`text-foreground`).
+- Logo & Icon: Change icon container shadow or background if it has hardcoded dark/night theme styling, and adjust the title colors (`text-foreground` instead of `text-white`).
+- Bottom Info / Footer: Back to store and other elements to use soft dark text.
+- Maintain error animations, show/hide eye logic, inputs elements with `#admin-password` and `#admin-login-btn` unmodified.
 
-### Step 4: Implementation Track - Milestone M4 (Product CRUD)
-- **Agent**: `teamwork_preview_orchestrator` (as Sub-orchestrator)
-- **Working Directory**: `.agents/sub_orch_crud/`
-- **Goal**: Build the admin product list dashboard page (`/admin` or `/admin/dashboard`) allowing full CRUD (Add, Edit, Delete) for products.
-- **Output**: CRUD interface for product management.
+### Task 2: Redesign Admin Dashboard Page (`src/app/admin/dashboard/page.tsx`)
+- Main Layout Background: Replace `bg-[#0D0D12]` (line 670) and related dark backgrounds with `bg-[#FFF7F2]`.
+- Sidebar & Header: Update sidebars to use the `glass` class or a semi-transparent white like `bg-white/80 border-r border-border` with dark text.
+- Text colors: Change general text colors from white/gray-on-dark (`text-white`, `text-white/30`, etc.) to dark foreground (`text-foreground` / `text-[#2D2D2D]`).
+- Stat Cards: Update `StatCard` to use `glass` (or `bg-white`) and dark text/accents.
+- Badge: Maintain color schemes but adapt backgrounds/borders to look nice on light themes, or keep existing ones if appropriate.
+- Inputs, Dropdowns, Selects: Update `inputCls` and `selectCls` to use solid white background (`bg-white`), border `border-border` (`#F0E4DB`), and dark text.
+- Product Table/Rows: Update table container background to `bg-white/50 backdrop-blur-md` and rows to hover with light hover states instead of `hover:bg-white/[0.015]`.
+- Modals (`ProductModal`, `ChangePasswordModal`): Update modal container cards from `glass-dark` to `glass` or `bg-white`, make tabs, fields, labels, inputs and buttons light-themed.
+- Custom Switch: Update background for switch when inactive to a light border/bg instead of dark.
+- Toast & Tooltips: Adapt toast alerts to light backgrounds or maintain readable states.
 
-### Step 5: Implementation Track - Milestone M5 (Storefront Integration)
-- **Agent**: `teamwork_preview_orchestrator` (as Sub-orchestrator)
-- **Working Directory**: `.agents/sub_orch_store/`
-- **Goal**: Hook up public-facing pages (home, shop, categories, wishlist, cart, product details) to dynamically fetch data from the data access layer.
-- **Output**: Storefront displaying live data, reflecting edits instantly.
-
-### Step 6: Integration and Phase 1 & 2 Verification
-- **Agent**: `teamwork_preview_orchestrator` (as Sub-orchestrator)
-- **Working Directory**: `.agents/sub_orch_verify/`
-- **Goal**:
-  1. Phase 1: Wait for `TEST_READY.md`, run E2E test suite (Tiers 1-4), fix bugs until all pass.
-  2. Phase 2: Run Challenger-led white-box Tier 5 testing for coverage hardening.
-- **Output**: Verified clean build and E2E test runs.
-
-## Governance & Safety Gating
-- Every milestone sub-orchestrator must follow the iteration loop: Explorer → Worker → Reviewer → gate.
-- The Forensic Auditor must run and verify there are no integrity violations.
-- Succession protocol: self-succeed after 16 spawns.
+### Task 3: Verification
+- Verify build compiles cleanly.
+- Verify E2E tests run and pass without failures.

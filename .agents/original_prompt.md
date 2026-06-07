@@ -1,51 +1,45 @@
-## 2026-06-06T13:00:31Z
+## 2026-06-07T02:48:00Z
 
-An admin portal for the Crochett & Co web application that allows editing site-wide contents (products, prices, photos, and general configuration) after logging in with a secure password, including options to edit the admin password itself.
+Implement fully functional, beautiful, and professional Categories, Orders, and Analytics management panels in the admin dashboard, following the existing light-theme aesthetic.
 
-Working directory: c:/Users/sri charan/Documents/projects/crochett-and-co
+Working directory: c:\Users\sri charan\Documents\projects\crochett-and-co
 Integrity mode: development
 
-## Requirements
+## Proposed Changes
 
-### R1. Admin Authentication & Management
-- A login screen or modal protected by a secure password, accessible via a specific route (e.g., `/admin`) or a subtle button in the layout.
-- The admin password must be editable by the admin from within the portal.
-- The default credentials should be clearly documented (e.g., password: `adminpassword123`) so the testing phase is possible.
+### 1. Database & APIs
+- **Categories**:
+  - Create `/api/categories/route.ts` supporting `GET` (list all categories) and `POST` (create new category).
+  - Create `/api/categories/[id]/route.ts` supporting `PUT` (edit category) and `DELETE` (delete category).
+- **Orders**:
+  - Add `Order` interface to `src/lib/data/orders.ts` (fields: `id`, `customerName`, `customerEmail`, `customerPhone`, `items: {productId, productName, quantity, price}[]`, `status` ('pending' | 'shipped' | 'completed' | 'cancelled'), `totalAmount`, `date`).
+  - Initialize a new JSON store: `src/lib/data/live_orders.json` with realistic mock order data.
+  - Expose order database functions in `src/lib/db.ts` (`getOrders()`, `getOrderById(id)`, `saveOrder(order)`, `deleteOrder(id)`).
+  - Create `/api/orders/route.ts` supporting `GET` and `POST`, and `/api/orders/[id]/route.ts` supporting `PUT` and `DELETE`.
 
-### R2. Content & Product Editing
-- An admin dashboard interface listing all products.
-- Ability to add new products, edit existing products (including name, description, price, original price, category, tags, inStock status, and photo URLs/images), and delete products.
-- Updates made by the admin must instantly reflect on the public-facing pages (home, shop, categories, wishlist, cart, and product details).
+### 2. Frontend User Interface
+- Enable the **Categories**, **Orders**, and **Analytics** navigation items in the sidebar.
+- Implement State-Based Tab Switching (`activeTab: 'products' | 'categories' | 'orders' | 'analytics'`).
+- **Categories Tab**:
+  - Add search bar & "Add Category" button.
+  - Display a beautiful list/grid of categories featuring their gradients, icons, name, slug, description, and product count.
+  - Implement a category editor modal/drawer to add/edit.
+- **Orders Tab**:
+  - Add search & status filter (All, Pending, Shipped, Completed, Cancelled).
+  - Display a clean order tracking list containing date, customer name, total, status, and items.
+  - Add an action button/dropdown/modal to update the status of any order (e.g., from 'pending' to 'shipped') or delete the order record.
+- **Analytics Tab**:
+  - Display interactive visual charts (using styled CSS/SVG bars/donuts) for monthly sales, revenue, top-selling categories, and order status breakdown.
+  - Include key cards: total revenue, average order value, total orders, active customers.
 
-### R3. Firebase Integration
-- Use Firebase (Firestore or Realtime Database) to store and persist product data, categories, and the admin password configuration.
-- Provide clear setup instructions and ensure the app loads initial default data from the local data files if Firebase is not connected or initialized (allowing graceful local fallback).
+## Verification & Testing
+- **Production Build**: Verify by compiling the app (`npm run build`).
+- **E2E Tests**: Verify all existing tests (`npm run test:e2e`) pass with no regressions.
 
-## Verification Plan
+## 2026-06-07T03:04:27Z
 
-### Manual Verification
-- Access `/admin` and log in with the default password.
-- Change the admin password to a new one. Log out and confirm the old password no longer works and the new password works.
-- Edit a product's price, name, and image path in the admin portal. Verify that the updated details are visible on the shop homepage, shop catalog, and the product's detail page.
-- Add a new product in the admin portal. Verify it appears in the catalog under the correct category.
-- Delete a product and verify it is no longer visible on the store front.
-- Refresh the page and confirm all changes persist across reloads.
-- Verify that Firebase database is successfully updated when changes are made.
+Hello! Can you please give us a quick status update on the implementation? The user is asking what is currently happening. Thank you!
 
-## Acceptance Criteria
+## 2026-06-07T03:11:11Z
 
-### Authentication
-- [ ] Accessible via a dedicated path (e.g., `/admin`) or button.
-- [ ] Admin login works using default password.
-- [ ] Changing password updates the stored credential and is immediately required for subsequent logins.
-
-### Product & Content Editing
-- [ ] Portal provides a form to edit Name, Price, Original Price, Image/Photo URLs, and Categories for any product.
-- [ ] Portal allows adding a new product with all standard fields.
-- [ ] Portal allows deleting a product.
-- [ ] Edits/additions/deletions immediately update the public store display.
-
-### Database Persistence
-- [ ] Data is read from and written to Firebase Database when configured.
-- [ ] App falls back to local static files if Firebase is not configured.
-- [ ] Refreshing the page persists edits.
+The user has requested to complete the task as quickly as possible. Please accelerate the implementation and validation phases. Thank you!
